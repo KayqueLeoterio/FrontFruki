@@ -311,7 +311,7 @@ function Logo() {
   return (
     <div className="logo" aria-label="Fruki Recomenda">
       <span className="logo-mark">
-        <img src="public/assets/fruki-logo.png" alt="" />
+        <img src="/assets/fruki-logo.png" alt="" />
       </span>
 
       <span className="logo-name">
@@ -490,7 +490,7 @@ function CustomerView({ client }: { client: RouteClient }) {
 
           <img
             className="hero-fruki-logo"
-            src="public/assets/fruki-hero-logo.jpg"
+            src="/assets/fruki-hero-logo.jpg"
             alt="Fruki"
           />
         </div>
