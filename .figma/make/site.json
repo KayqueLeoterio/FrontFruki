@@ -1,0 +1,10 @@
+{
+  "description": "Recomenda de 5 a 15 produtos para clientes e ajuda vendedores a entender os motivos de cada sugestão, com identidade visual inspirada na Fruki.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
