@@ -1,5 +1,5 @@
 
-import { useMemo, useState, type FormEvent, type ReactNode } from "react"
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react"
 import PdvScreen from "./PdvScreen"
 import RouteScreen, {
   findClientByCnpj,
@@ -227,9 +227,10 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
     chevron: <path d="m9 18 6-6-6-6" />,
     close: (
       <>
-        <path d="m6 6 12 12" />
-        <path d="M18 6 6 18" />
-      </>
+        <path d="M10 17l5-5-5-5" />
+        <path d="M15 12H3" />
+        <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+  </>
     ),
     grid: (
       <>
@@ -372,6 +373,40 @@ function Header({
   onClientLogout: () => void
   customerName?: string
 }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [menuOpen])
+
+  const displayName = view === "cliente" ? (customerName || "Cliente") : "Vendedor"
+  const initials = view === "cliente"
+    ? (customerName ? getInitials(customerName) : "CL")
+    : "AS"
+
+  const handleLogout = () => {
+    setMenuOpen(false)
+    if (view === "cliente") {
+      onClientLogout()
+    } else {
+      // Vendedor logout - pode ser expandido conforme necessário
+      onClientLogout()
+    }
+  }
+
   return (
     <header className="app-header">
       <div className="header-inner">
@@ -398,21 +433,44 @@ function Header({
             <Icon name="bell" />
           </button>
 
-          <button
-            className="avatar"
-            aria-label={
-              view === "cliente"
-                ? "Sair da área do cliente"
-                : "Abrir perfil"
-            }
-            onClick={view === "cliente" ? onClientLogout : undefined}
-          >
-            {view === "cliente"
-              ? customerName
-                ? getInitials(customerName)
-                : "CL"
-              : "AS"}
-          </button>
+          <div className="avatar-menu" ref={menuRef}>
+            <button
+              className="avatar"
+              aria-label="Abrir menu do perfil"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              {initials}
+            </button>
+
+            {menuOpen && (
+              <div className="avatar-dropdown" role="menu">
+                <div className="avatar-dropdown__header">
+                  <strong>{displayName}</strong>
+                  <span>{view === "cliente" ? "Área do cliente" : "Área do vendedor"}</span>
+                </div>
+                <button
+                  className="avatar-dropdown__item"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false)
+                    alert("Perfil - funcionalidade em breve")
+                  }}
+                >
+                  <Icon name="profile" size={16} />
+                  Ver perfil
+                </button>
+                <button
+                  className="avatar-dropdown__item avatar-dropdown__item--danger"
+                  role="menuitem"
+                  onClick={handleLogout}
+                >
+                  <Icon name="close" size={16} />
+                  Sair
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>
@@ -569,9 +627,7 @@ function CustomerLogin({
             estabelecimento.
           </p>
 
-          <div className="customer-login__brand-mark">
-            <img src="/assets/fruki-hero-logo.jpg" alt="Fruki" />
-          </div>
+
         </div>
 
         <div className="customer-login__form-area">

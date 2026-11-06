@@ -154,14 +154,6 @@ function Icon({ name, size = 30 }: { name: ModuleIcon; size?: number }) {
   )
 }
 
-function Brand() {
-  return (
-    <div className="pdv-brand" aria-label="Fruki">
-      fruki
-    </div>
-  )
-}
-
 export default function PdvScreen({
   embedded = false,
   client,
@@ -189,7 +181,7 @@ export default function PdvScreen({
     <div className={`pdv-app ${embedded ? "pdv-app--embedded" : ""}`}>
       <header className="pdv-header">
         <div className="pdv-header__inner">
-          <Brand />
+          <div className="pdv-header__spacer" aria-hidden="true" />
 
           <div>
             <span>Execução no ponto de venda</span>

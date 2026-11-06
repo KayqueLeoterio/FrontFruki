@@ -144,14 +144,6 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   )
 }
 
-function Brand() {
-  return (
-    <div className="route-brand" aria-label="Fruki">
-      <span>fruki</span>
-    </div>
-  )
-}
-
 function ClientCard({
   client,
   onOpen,
@@ -254,7 +246,7 @@ export default function RouteScreen({
     <div className={`route-app ${embedded ? "route-app--embedded" : ""}`}>
       <header className="route-header">
         <div className="route-header__inner">
-          <Brand />
+          <div className="route-header__spacer" aria-hidden="true" />
 
           <div className="route-header__title">
             <span>Planejamento de visitas</span>
